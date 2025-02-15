@@ -1,10 +1,8 @@
 services:
   tabby:
-    restart: always
+    restart: unless-stopped
     image: registry.tabbyml.com/tabbyml/tabby
     command: serve --model StarCoder-1B --chat-model Qwen2-1.5B-Instruct --device cuda
-    volumes:
-      - "$HOME/.tabby:/data"
     ports:
       - 8080:8080
     deploy:
@@ -14,3 +12,9 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    volumes:
+      - 'tabby_local:/var/lib/mysql'
+
+volumes:
+  tabby_local:
+    driver: local
